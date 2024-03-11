@@ -18,6 +18,7 @@
         <module>jc-club-infra</module>
         <module>jc-club-starter</module>
     </modules>
+
    <dependencies>
        <dependency>
            <groupId>org.springframework.boot</groupId>
