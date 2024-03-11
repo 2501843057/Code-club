@@ -58,10 +58,10 @@
                         </goals>
                     </execution>
                 </executions>
-<!--                <configuration>-->
-<!--                    <mainClass>com.jingdianjichi.subject.SubjectApplication</mainClass> &lt;!&ndash; 替换为实际的启动类全名 &ndash;&gt;-->
-<!--                    <includeSystemScope>true</includeSystemScope>-->
-<!--                </configuration>-->
+                <configuration>
+                    <mainClass>com.jingdianjichi.subject.SubjectApplication</mainClass> <!-- 替换为实际的启动类全名 -->
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
             </plugin>
         </plugins>
     </build>
