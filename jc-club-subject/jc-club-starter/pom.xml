@@ -101,6 +101,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <mainClass>com.jingdianjichi.subject.SubjectApplication</mainClass> <!-- 替换为实际的启动类全名 -->
+                </configuration>
             </plugin>
         </plugins>
     </build>
