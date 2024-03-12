@@ -51,7 +51,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.3.0.RELEASE</version>
+                <version>2.4.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -59,10 +59,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>com.jingdianjichi.subject.SubjectApplication</mainClass> <!-- 替换为实际的启动类全名 -->
-                    <includeSystemScope>true</includeSystemScope>
-                </configuration>
             </plugin>
         </plugins>
     </build>
