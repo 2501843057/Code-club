@@ -27,7 +27,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.jingdianjc</groupId>
+            <groupId>com.jingdianjichi</groupId>
             <artifactId>jc-club-infra</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
