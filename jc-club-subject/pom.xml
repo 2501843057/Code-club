@@ -3,12 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <groupId>com.jingdianjc</groupId>
+    <groupId>com.jingdianjichi</groupId>
     <artifactId>jc-club-subject</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <modelVersion>4.0.0</modelVersion>
+    <version>1.0-SNAPSHOT</version>
     <description>jc-club-题目领域服务</description>
+    <modelVersion>4.0.0</modelVersion>
 
     <modules>
         <module>jc-club-subject-api</module>

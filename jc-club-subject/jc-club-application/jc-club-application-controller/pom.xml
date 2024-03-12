@@ -3,10 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.jingdianjc</groupId>
         <artifactId>jc-club-application</artifactId>
+        <groupId>com.jingdianjichi</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>jc-club-application-controller</artifactId>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -15,9 +18,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>jc-club-application-controller</artifactId>
 
     <dependencies>
         <dependency>
