@@ -1,15 +1,17 @@
-package com.jingdianjichi.auth;
+package com.jingdianjichi.club.gateway;
 
-import org.mybatis.spring.annotation.MapperScan;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+/**
+ * oss服务启动类
+ */
 @SpringBootApplication
 @ComponentScan("com.jingdianjichi")
-@MapperScan("com.jingdianjichi.**.mapper")
-public class AuthApplication {
+public class GatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AuthApplication.class);
+        SpringApplication.run(GatewayApplication.class);
     }
 }

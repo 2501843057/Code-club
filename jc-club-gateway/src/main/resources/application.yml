@@ -1,0 +1,24 @@
+server:
+  port: 5000
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: oss
+          uri: lb://jc-club-oss-dev
+          predicates:
+            - Path=/oss/**
+          filters:
+            - StripPrefix=1
+        - id: auth
+          uri: lb://jc-club-auth-dev
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+        - id: subject
+          uri: lb://jc-club-subject-dev
+          predicates:
+            - Path=/subject/**
+          filters:
+            - StripPrefix=1
