@@ -5,10 +5,13 @@ import com.alibaba.fastjson.JSON;
 import com.jingdianjichi.domain.convent.SubjectLabelBoConverter;
 import com.jingdianjichi.domain.entity.SubjectLabelBo;
 import com.jingdianjichi.domain.service.SubjectLabelDomainService;
+import com.jingdianjichi.infra.batic.entity.SubjectCategory;
 import com.jingdianjichi.infra.batic.entity.SubjectLabel;
 import com.jingdianjichi.infra.batic.entity.SubjectMapping;
+import com.jingdianjichi.infra.batic.service.SubjectCategoryService;
 import com.jingdianjichi.infra.batic.service.SubjectLabelService;
 import com.jingdianjichi.infra.batic.service.SubjectMappingService;
+import com.jingdianjichi.subject.common.enums.CategoryTypeEnums;
 import com.jingdianjichi.subject.common.enums.IsDeleteEnums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,9 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
 
     @Resource
     private SubjectMappingService subjectMappingService;
+
+    @Resource
+    private SubjectCategoryService subjectCategoryService;
 
     public Boolean add(SubjectLabelBo subjectLabelBo) {
         if (log.isInfoEnabled()) {
@@ -63,6 +69,17 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
         if (log.isInfoEnabled()) {
             log.info("SubjectLabelDomainServiceImpl.queryLabelByCategoryId.bo:{}", JSON.toJSONString(subjectLabelBo));
         }
+
+        //如果当前分类是1级分类，则查询所有标签
+        SubjectCategory subjectCategory = subjectCategoryService.queryById(subjectLabelBo.getCategoryId());
+        if(CategoryTypeEnums.PRIMARY.getCode() == subjectCategory.getCategoryType()){
+            SubjectLabel subjectLabel = new SubjectLabel();
+            subjectLabel.setCategoryId(subjectLabelBo.getCategoryId());
+            List<SubjectLabel> labelList = subjectLabelService.queryByCondition(subjectLabel);
+            List<SubjectLabelBo> labelResultList = SubjectLabelBoConverter.INSTANCE.LabelListTOBoList(labelList);
+            return labelResultList;
+        }
+
         SubjectLabel subjectLabel = SubjectLabelBoConverter.INSTANCE.subjectBoTOLabel(subjectLabelBo);
         subjectLabel.setIsDeleted(IsDeleteEnums.UN_DELETE.code);
         // 去subject_mapping表查标签id
@@ -76,5 +93,4 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
         List<SubjectLabelBo> boList = SubjectLabelBoConverter.INSTANCE.LabelListTOBoList(labelList);
         return boList;
     }
-
 }

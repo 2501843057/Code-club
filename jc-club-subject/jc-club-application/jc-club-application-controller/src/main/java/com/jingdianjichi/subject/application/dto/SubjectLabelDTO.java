@@ -28,7 +28,7 @@ public class SubjectLabelDTO implements Serializable {
     /**
      * 分类id
      */
-    private String categoryId;
+    private Long categoryId;
 
 }
 

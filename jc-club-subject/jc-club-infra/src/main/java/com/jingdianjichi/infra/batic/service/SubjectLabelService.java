@@ -48,4 +48,6 @@ public interface SubjectLabelService {
     int delete(SubjectLabel subjectLabel);
 
     List<SubjectLabel> batchQueryByLabelId(List<Long> list);
+
+    List<SubjectLabel> queryByCondition(SubjectLabel subjectLabel);
 }

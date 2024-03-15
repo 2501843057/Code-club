@@ -77,4 +77,9 @@ public class SubjectLabelServiceImpl implements SubjectLabelService {
         return subjectLabelDao.batchQueryByLabelId(list);
     }
 
+    @Override
+    public List<SubjectLabel> queryByCondition(SubjectLabel subjectLabel) {
+        return subjectLabelDao.queryByCondition(subjectLabel);
+    }
+
 }

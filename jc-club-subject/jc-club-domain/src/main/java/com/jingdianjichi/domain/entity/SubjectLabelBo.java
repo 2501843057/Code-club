@@ -29,7 +29,7 @@ public class SubjectLabelBo implements Serializable {
     /**
      * 分类id
      */
-    private String categoryId;
+    private Long categoryId;
 
 }
 

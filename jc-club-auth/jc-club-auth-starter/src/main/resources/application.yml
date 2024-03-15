@@ -1,0 +1,39 @@
+server:
+  port: 3011
+spring:
+  datasource:
+    username: root
+    password: houD77lyyt+yYQQT0HXIBh6JHgAETvpnmJSwWtrKSJKUNYnQDm+MdiA4ELyYZyyN3zus0JnlgRF/tDCHAb3JOA==
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.120.54.15/jc-club?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 初始连接数
+      initialSize: 20
+      # 最小连接池数量
+      minIdle: 20
+      # 最大连接池数量
+      maxActive: 100
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      connectionProperties: config.decrypt=true;config.decrypt.key=${publicKey};
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: 123456
+      filter:
+        stat:
+          enabled: true
+          slow-sql-millis: 2000
+          log-slow-sql: true
+        wall:
+          enabled: true
+        config:
+          enabled: true
+logging:
+  config: classpath:log4j2-spring.xml
+publicKey: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJEokRDWRxKTCPinBe/r+llpB6l/6EgDjoIen3+zDvkfuyibs+mL0ODjGAOWyJBgFxCDiHphKoDOjkn7FwLtYAECAwEAAQ==
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
