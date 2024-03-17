@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * oss服务启动类
+ * 网关启动类
  */
 @SpringBootApplication
 @ComponentScan("com.jingdianjichi")
