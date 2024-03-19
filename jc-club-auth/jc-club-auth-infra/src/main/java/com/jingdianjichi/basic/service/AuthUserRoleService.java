@@ -1,14 +1,15 @@
 package com.jingdianjichi.basic.service;
 
-import com.jingdianjichi.basic.entity.AuthUser;
+import com.jingdianjichi.basic.entity.AuthUserRole;
+
 
 /**
- * 用户信息表(AuthUser)表服务接口
+ * 用户角色表(AuthUserRole)表服务接口
  *
  * @author makejava
- * @since 2024-03-17 18:58:59
+ * @since 2024-03-17 21:34:34
  */
-public interface AuthUserService {
+public interface AuthUserRoleService {
 
     /**
      * 通过ID查询单条数据
@@ -16,24 +17,25 @@ public interface AuthUserService {
      * @param id 主键
      * @return 实例对象
      */
-    AuthUser queryById(Long id);
+    AuthUserRole queryById(Long id);
+
 
 
     /**
      * 新增数据
      *
-     * @param authUser 实例对象
+     * @param authUserRole 实例对象
      * @return 实例对象
      */
-    Integer insert(AuthUser authUser);
+    Integer insert(AuthUserRole authUserRole);
 
     /**
      * 修改数据
      *
-     * @param authUser 实例对象
+     * @param authUserRole 实例对象
      * @return 实例对象
      */
-    Integer update(AuthUser authUser);
+    AuthUserRole update(AuthUserRole authUserRole);
 
     /**
      * 通过主键删除数据
@@ -43,5 +45,4 @@ public interface AuthUserService {
      */
     boolean deleteById(Long id);
 
-    Boolean queryIsExist(String openId);
 }

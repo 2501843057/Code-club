@@ -142,6 +142,15 @@
             </if>
         </where>
     </select>
+    <select id="queryIsExist" resultType="java.lang.Integer">
+        select  COUNT(1)
+        from auth_user
+        <where>
+            <if test="nickName != null and nickName != ''">
+                and nick_name = #{nickName}
+            </if>
+         </where>
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">

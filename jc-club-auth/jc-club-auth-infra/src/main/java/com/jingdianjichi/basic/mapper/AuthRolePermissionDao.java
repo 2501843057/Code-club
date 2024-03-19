@@ -1,16 +1,16 @@
 package com.jingdianjichi.basic.mapper;
 
-import com.jingdianjichi.basic.entity.AuthUser;
+import com.jingdianjichi.basic.entity.AuthRolePermission;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 用户信息表(AuthUser)表数据库访问层
+ * 角色权限关联表(AuthRolePermission)表数据库访问层
  *
  * @author makejava
- * @since 2024-03-17 18:58:51
+ * @since 2024-03-17 22:32:55
  */
-public interface AuthUserDao {
+public interface AuthRolePermissionDao {
 
     /**
      * 通过ID查询单条数据
@@ -18,56 +18,56 @@ public interface AuthUserDao {
      * @param id 主键
      * @return 实例对象
      */
-    AuthUser queryById(Long id);
+    AuthRolePermission queryById(Long id);
 
     /**
      * 查询指定行数据
      *
-     * @param authUser 查询条件
+     * @param authRolePermission 查询条件
      * @return 对象列表
      */
-    List<AuthUser> queryAllByLimit(AuthUser authUser);
+    List<AuthRolePermission> queryAllByLimit(AuthRolePermission authRolePermission);
 
     /**
      * 统计总行数
      *
-     * @param authUser 查询条件
+     * @param authRolePermission 查询条件
      * @return 总行数
      */
-    long count(AuthUser authUser);
+    long count(AuthRolePermission authRolePermission);
 
     /**
      * 新增数据
      *
-     * @param authUser 实例对象
+     * @param authRolePermission 实例对象
      * @return 影响行数
      */
-    int insert(AuthUser authUser);
+    int insert(AuthRolePermission authRolePermission);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
      *
-     * @param entities List<AuthUser> 实例对象列表
+     * @param entities List<AuthRolePermission> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<AuthUser> entities);
+    int insertBatch(@Param("entities") List<AuthRolePermission> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
      *
-     * @param entities List<AuthUser> 实例对象列表
+     * @param entities List<AuthRolePermission> 实例对象列表
      * @return 影响行数
      * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
      */
-    int insertOrUpdateBatch(@Param("entities") List<AuthUser> entities);
+    int insertOrUpdateBatch(@Param("entities") List<AuthRolePermission> entities);
 
     /**
      * 修改数据
      *
-     * @param authUser 实例对象
+     * @param authRolePermission 实例对象
      * @return 影响行数
      */
-    int update(AuthUser authUser);
+    int update(AuthRolePermission authRolePermission);
 
     /**
      * 通过主键删除数据
@@ -77,6 +77,6 @@ public interface AuthUserDao {
      */
     int deleteById(Long id);
 
-    Integer queryIsExist(String openId);
+    List<AuthRolePermission> queryByCondition(AuthRolePermission authRolePermission);
 }
 
