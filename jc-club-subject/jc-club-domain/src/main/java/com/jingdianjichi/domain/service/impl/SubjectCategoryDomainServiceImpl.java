@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
@@ -118,34 +120,54 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
         List<SubjectCategoryBo> subjectCategoryBoList = SubjectCategoryBoConverter.INSTANCE.ListToBoList(subjectCategoryList);
 
-
-
-
-
-
-
-        // 一次获取标签信息
-        List<FutureTask<Map<Long,List<SubjectLabelBo>>>> futureTaskList = new ArrayList<>();
+        /**
+         *  多线程处理方法 CompletableFuture
+         */
         HashMap<Long, List<SubjectLabelBo>> map = new HashMap<>();
-
-        // 线程池并发调用
-        subjectCategoryBoList.forEach(category -> {
-            FutureTask futureTask = new FutureTask<>(()-> getLabelList(category));
-            futureTaskList.add(futureTask);
-            labelThreadPool.submit(futureTask);
-        });
-
-        for(FutureTask<Map<Long,List<SubjectLabelBo>>> futureTask:futureTaskList){
-            Map<Long, List<SubjectLabelBo>> resultMap = futureTask.get();
-            if(CollectionUtils.isEmpty(resultMap)){
-                continue;
+        List<CompletableFuture<Map<Long, List<SubjectLabelBo>>>> completableFutureList = subjectCategoryBoList.stream().map(category ->
+                CompletableFuture.supplyAsync(() -> getLabelList(category), labelThreadPool)).collect(Collectors.toList());
+        completableFutureList.forEach(future->{
+            Map<Long,List<SubjectLabelBo>> resultMap = null;
+            try {
+                resultMap = future.get();
+                if(CollectionUtils.isEmpty(resultMap)){
+                    return;
+                }
+                map.putAll(resultMap);
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
             }
-            map.putAll(resultMap);
-        }
+        });
 
         subjectCategoryBoList.forEach(subjectCategoryBo1 -> {
             subjectCategoryBo1.setLabelBoList(map.get(subjectCategoryBo1.getId()));
         });
+
+          /**
+         *  多线程处理方法 FutureTask
+         */
+//        // 一次获取标签信息
+//        List<FutureTask<Map<Long,List<SubjectLabelBo>>>> futureTaskList = new ArrayList<>();
+//        HashMap<Long, List<SubjectLabelBo>> map = new HashMap<>();
+//
+//        // 线程池并发调用
+//        subjectCategoryBoList.forEach(category -> {
+//            FutureTask futureTask = new FutureTask<>(()-> getLabelList(category));
+//            futureTaskList.add(futureTask);
+//            labelThreadPool.submit(futureTask);
+//        });
+//
+//        for(FutureTask<Map<Long,List<SubjectLabelBo>>> futureTask:futureTaskList){
+//            Map<Long, List<SubjectLabelBo>> resultMap = futureTask.get();
+//            if(CollectionUtils.isEmpty(resultMap)){
+//                continue;
+//            }
+//            map.putAll(resultMap);
+//        }
+//
+//        subjectCategoryBoList.forEach(subjectCategoryBo1 -> {
+//            subjectCategoryBo1.setLabelBoList(map.get(subjectCategoryBo1.getId()));
+//        });
 
         return subjectCategoryBoList;
     }
