@@ -87,4 +87,9 @@ public class SubjectMappingServiceImpl implements SubjectMappingService {
     public List<SubjectMapping> queryLabelId(SubjectMapping subjectMapping) {
         return subjectMappingDao.queryLabelId(subjectMapping);
     }
+
+    @Override
+    public int getCount(Long id) {
+        return subjectMappingDao.getCount(id);
+    }
 }

@@ -74,5 +74,7 @@ public interface SubjectMappingDao {
     List<SubjectMapping> queryLabel(SubjectLabel subjectLabel);
 
     List<SubjectMapping> queryLabelId(SubjectMapping subjectMapping);
+
+    int getCount(Long id);
 }
 

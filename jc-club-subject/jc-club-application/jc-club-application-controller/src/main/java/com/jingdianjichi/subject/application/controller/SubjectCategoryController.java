@@ -6,12 +6,15 @@ import com.google.common.base.Preconditions;
 import com.jingdianjichi.domain.entity.SubjectCategoryBo;
 import com.jingdianjichi.domain.service.SubjectCategoryDomainService;
 import com.jingdianjichi.subject.application.convent.SubjectCategoryDTOConverter;
+import com.jingdianjichi.subject.application.convent.SubjectLabelDTOConverter;
 import com.jingdianjichi.subject.application.dto.SubjectCategoryDTO;
+import com.jingdianjichi.subject.application.dto.SubjectLabelDTO;
 import com.jingdianjichi.subject.common.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -131,6 +134,33 @@ public class SubjectCategoryController {
         }catch (Exception e){
             log.error("SubjectCategoryController.update.error:{}", e.getMessage(),e);
             return Result.fail("删除分类失败");
+        }
+    }
+
+    /**
+     * 一次性查询分类及标签
+     */
+    @PostMapping("/queryCategoryAndLabel")
+    public Result<List<SubjectCategoryDTO>> queryCategoryAndLabel(@RequestBody SubjectCategoryDTO subjectCategoryDTO){
+        try{
+            if(log.isInfoEnabled()){
+                log.info("SubjectCategoryController.queryCategoryAndLabel.dto:{}", JSON.toJSONString(subjectCategoryDTO));
+            }
+            Preconditions.checkNotNull(subjectCategoryDTO.getId(),"id不能为空");
+            SubjectCategoryBo subjectCategoryBo = SubjectCategoryDTOConverter
+                    .INSTANCE.subjectCategoryDTOToBo(subjectCategoryDTO);
+            List<SubjectCategoryBo> subjectCategoryBOList = subjectCategoryDomainService.queryCategoryAndLabel(subjectCategoryBo);
+            ArrayList<SubjectCategoryDTO> dtoList = new ArrayList<>();
+            subjectCategoryBOList.forEach(bo->{
+                SubjectCategoryDTO dto = SubjectCategoryDTOConverter.INSTANCE.BOtoDto(bo);
+                List<SubjectLabelDTO> dtoLabel = SubjectLabelDTOConverter.INSTANCE.subjectBoOListToDTOList(bo.getLabelBoList());
+                dto.setLabelDTOList(dtoLabel);
+                dtoList.add(dto);
+            });
+            return Result.ok(dtoList);
+        }catch (Exception e){
+            log.error("SubjectCategoryController.update.error:{}",e.getMessage(),e);
+            return Result.fail();
         }
     }
 

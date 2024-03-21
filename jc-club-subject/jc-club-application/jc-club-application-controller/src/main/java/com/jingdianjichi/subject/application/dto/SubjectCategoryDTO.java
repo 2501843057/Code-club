@@ -2,6 +2,8 @@ package com.jingdianjichi.subject.application.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 
 /**
  * 题目分类(SubjectCategory)DTO
@@ -32,6 +34,10 @@ public class SubjectCategoryDTO {
      * 父级id
      */
     private Long parentId;
+
+    private Integer count;
+
+    private List<SubjectLabelDTO> labelDTOList;
 
 
 }

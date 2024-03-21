@@ -43,4 +43,6 @@ public interface StorageAdapter {
      */
     public void deleteObject(String bucket,String objectName) ;
 
+    public String getUrl(String bucket, String objectName);
+
 }

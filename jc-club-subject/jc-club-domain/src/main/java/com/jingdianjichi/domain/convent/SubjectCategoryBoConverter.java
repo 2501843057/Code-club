@@ -15,4 +15,6 @@ public interface SubjectCategoryBoConverter {
 
 
     List<SubjectCategoryBo>  ListToBoList(List<SubjectCategory> subjectCategoryList);
+
+
 }

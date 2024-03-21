@@ -90,4 +90,6 @@ public class MinioUtil {
         minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucket).object(objectName).build());
     }
 
+
+
 }

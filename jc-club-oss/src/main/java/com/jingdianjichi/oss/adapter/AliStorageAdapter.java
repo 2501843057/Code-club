@@ -52,4 +52,9 @@ public class AliStorageAdapter implements StorageAdapter {
     @SneakyThrows
     public void deleteObject(String bucket, String objectName) {
     }
+
+    @Override
+    public String getUrl(String bucket, String objectName) {
+        return null;
+    }
 }

@@ -50,7 +50,7 @@ public interface SubjectMappingService {
     /**
      *  根据分类id查询标签
      */
-    List<SubjectMapping> queryLabel( SubjectLabel subjectLabel);
+    List<SubjectMapping> queryLabel(SubjectLabel subjectLabel);
 
     /**
      *  批量插入
@@ -61,4 +61,7 @@ public interface SubjectMappingService {
      * 根据题目id查询对应的标签
      */
     List<SubjectMapping> queryLabelId(SubjectMapping subjectMapping);
+
+
+    int getCount(Long id);
 }

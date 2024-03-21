@@ -18,8 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +58,13 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @SneakyThrows
     @Transactional(rollbackFor = Exception.class)
     public Boolean register(AuthUserBO authUserBO) {
+        // 判断用户是否登录过
+        AuthUser existAuthUser = new AuthUser();
+        existAuthUser.setUserName(authUserBO.getUserName());
+        List<AuthUser> existUser = authUserService.queryByCondition(existAuthUser);
+        if(existUser.size() > 0){
+            return true;
+        }
         // bo -> AuthUser
         AuthUser authUser = AuthUserBOConverter.INSTANCE.BoToEntity(authUserBO);
         if(authUser.getPassword() != null){
@@ -126,5 +135,17 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         StpUtil.login(openId);
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         return tokenInfo;
+    }
+
+    @Override
+    public AuthUserBO getUserInfo(AuthUserBO authUserBO) {
+        AuthUser authUser = AuthUserBOConverter.INSTANCE.BoToEntity(authUserBO);
+        List<AuthUser> authUsers = authUserService.queryByCondition(authUser);
+        if(CollectionUtils.isEmpty(authUsers)){
+            return new AuthUserBO();
+        }
+        AuthUser user = authUsers.get(0);
+        AuthUserBO userInfoBo = AuthUserBOConverter.INSTANCE.EntityToBo(user);
+        return userInfoBo;
     }
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -89,7 +90,7 @@ public class PermissionController {
      * 查询用户权限
      */
     @RequestMapping("getPermission")
-    public Result<Boolean> getPermission(String userName) {
+    public Result<String> getPermission(String userName) {
         try {
             log.info("PermissionController.getPermission.userName:{}",userName);
             Preconditions.checkArgument(!StringUtils.isBlank(userName), "用户id不能为空");

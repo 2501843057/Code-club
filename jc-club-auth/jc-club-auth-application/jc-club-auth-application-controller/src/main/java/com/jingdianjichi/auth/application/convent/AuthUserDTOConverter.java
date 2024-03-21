@@ -10,5 +10,7 @@ public interface AuthUserDTOConverter {
 
     AuthUserDTOConverter INSTANCE = Mappers.getMapper(AuthUserDTOConverter.class);
 
-    AuthUserBO dtoToBo(AuthUserDTO authUserDTO);;
+    AuthUserBO dtoToBo(AuthUserDTO authUserDTO);
+
+    AuthUserDTO boToDto(AuthUserBO authUserBO);;
 }

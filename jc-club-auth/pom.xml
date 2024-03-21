@@ -13,7 +13,6 @@
         <module>jc-club-auth-common</module>
         <module>jc-club-auth-domain</module>
         <module>jc-club-auth-infra</module>
-        <module>jc-club-auth-domain</module>
         <module>jc-club-auth-api</module>
         <module>jc-club-auth-starter</module>
     </modules>

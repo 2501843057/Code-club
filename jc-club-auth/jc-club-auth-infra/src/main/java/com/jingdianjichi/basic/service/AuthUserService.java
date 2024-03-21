@@ -2,6 +2,8 @@ package com.jingdianjichi.basic.service;
 
 import com.jingdianjichi.basic.entity.AuthUser;
 
+import java.util.List;
+
 /**
  * 用户信息表(AuthUser)表服务接口
  *
@@ -44,4 +46,6 @@ public interface AuthUserService {
     boolean deleteById(Long id);
 
     Boolean queryIsExist(String openId);
+
+    List<AuthUser> queryByCondition(AuthUser existAuthUser);
 }

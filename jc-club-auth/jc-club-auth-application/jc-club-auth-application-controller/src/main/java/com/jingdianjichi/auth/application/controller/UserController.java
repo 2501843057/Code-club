@@ -117,8 +117,37 @@ public class UserController {
         }
     }
 
+    /**
+     * 获取用户信息
+     *
+     * @param authUserDTO
+     * @return
+     */
+    @RequestMapping("getUserInfo")
+    public Result<Boolean> getUserInfo(@RequestBody AuthUserDTO authUserDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("UserController.getUserInfo.dto:{}", JSON.toJSONString(authUserDTO));
+            }
+            Preconditions.checkNotNull(authUserDTO.getUserName(), "用户名名称不能为空");
+            // dto -> bo
+            AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.dtoToBo(authUserDTO);
+            AuthUserBO userInfo  =authUserDomainService.getUserInfo(authUserBO);
+            AuthUserDTO userInfoDto = AuthUserDTOConverter.INSTANCE.boToDto(userInfo);
 
-    // 测试登录，浏览器访问： http://localhost:8081/user/doLogin?username=zhang&password=123456
+            return Result.ok(userInfoDto);
+        } catch (Exception e) {
+            log.error("UserController.getUserInfo.error", e);
+            return Result.fail("获取用户信息失败");
+        }
+    }
+
+
+    /**
+     * 登录
+     * @param validCode
+     * @return
+     */
     @RequestMapping("doLogin")
     public Result doLogin(String validCode) {
 
@@ -130,6 +159,26 @@ public class UserController {
             return Result.fail("用户登录失败");
         }
 
+    }
+
+
+    /**
+     * 登出
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("logOut")
+    public Result logOut(String UserName) {
+        try {
+            log.info("UserController.logOut.dto:{}", UserName);
+            Preconditions.checkNotNull(UserName, "用户名名称不能为空");
+            StpUtil.logout(UserName);
+            return Result.ok();
+        } catch (Exception e) {
+            log.error("UserController.getUserInfo.error", e);
+            return Result.fail("用户登出失败");
+        }
     }
 
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
