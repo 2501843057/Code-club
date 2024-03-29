@@ -6,6 +6,8 @@ import com.google.common.base.Preconditions;
 import com.jingdianjichi.domain.entity.SubjectAnswerBo;
 import com.jingdianjichi.domain.entity.SubjectInfoBo;
 import com.jingdianjichi.domain.service.SubjectInfoDomainService;
+import com.jingdianjichi.infra.batic.entity.SubjectInfo;
+import com.jingdianjichi.infra.batic.entity.SubjectInfoEs;
 import com.jingdianjichi.subject.application.convent.SubjectAnswerDTOConverter;
 import com.jingdianjichi.subject.application.convent.SubjectCategoryDTOConverter;
 import com.jingdianjichi.subject.application.convent.SubjectInfoDTOConverter;
@@ -13,6 +15,7 @@ import com.jingdianjichi.subject.application.dto.SubjectInfoDTO;
 import com.jingdianjichi.subject.common.entity.PageResult;
 import com.jingdianjichi.subject.common.entity.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -132,4 +135,49 @@ public class SubjectController {
             return Result.fail("查询题目详情失败");
         }
     }
+
+
+    /**
+     * 全文检索
+     */
+    @PostMapping("/getSubjectPageBySearch")
+    public Result<PageResult<SubjectInfoEs>> getSubjectPageBySearch(@RequestBody SubjectInfoDTO subjectInfoDTO){
+        try{
+            if(log.isInfoEnabled()){
+                log.info("SubjectController.getSubjectPage.dto:{}", JSON.toJSONString(subjectInfoDTO));
+            }
+
+            // 参数校验
+            Preconditions.checkArgument(Strings.isNotBlank(subjectInfoDTO.getKeyWord()), "关键词不能为空");
+
+            // DTO -> BO
+            SubjectInfoBo subjectInfoBo = SubjectInfoDTOConverter.INSTANCE.dtoToBo(subjectInfoDTO);
+            subjectInfoBo.setPageNo(subjectInfoDTO.getPageNo());
+            subjectInfoBo.setPageSize(subjectInfoBo.getPageSize());
+            PageResult<SubjectInfoEs> result = subjectInfoDomainService.getSubjectPageBySearch(subjectInfoBo);
+
+            return Result.ok(result);
+        }catch (Exception e){
+            log.error("SubjectInfoController.getSubjectPageBySearch.error:{}", e.getMessage(),e);
+            return Result.fail("全文检索失败");
+        }
+    }
+
+
+    /**
+     * 排行榜（数据库版）
+     */
+    @PostMapping("/getRankings")
+    public Result<SubjectInfoDTO> getRankings(){
+        try{
+            List<SubjectInfoBo> subjectInfoBos =  subjectInfoDomainService.getRankings();
+            // DTO -> BO
+            List<SubjectInfoDTO> subjectInfoBo = SubjectInfoDTOConverter.INSTANCE.boListToDTOList(subjectInfoBos);
+            return Result.ok(subjectInfoBo);
+        }catch (Exception e){
+            log.error("SubjectInfoController.getRankings.error:{}", e.getMessage(),e);
+            return Result.fail("排行榜（数据库版）失败");
+        }
+    }
+
 }

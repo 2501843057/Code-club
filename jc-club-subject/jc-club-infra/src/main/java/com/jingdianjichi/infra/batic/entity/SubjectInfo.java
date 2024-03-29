@@ -60,6 +60,8 @@ public class SubjectInfo implements Serializable {
     
     private Integer isDeleted;
 
+    private Integer subjectCount;
+
 
 }
 

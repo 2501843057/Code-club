@@ -7,8 +7,8 @@ import com.google.common.base.Preconditions;
 import com.jingdianjichi.auth.domain.entity.AuthUserBO;
 import com.jingdianjichi.auth.domain.service.AuthUserDomainService;
 import com.jingdianjichi.auth.application.convent.AuthUserDTOConverter;
-import com.jingdianjichi.auth.application.dto.AuthUserDTO;
-import com.jingdianjichi.auth.common.entity.Result;
+import com.jingdianjichi.auth.entity.Result;
+import com.jingdianjichi.auth.entity.AuthUserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -119,9 +119,6 @@ public class UserController {
 
     /**
      * 获取用户信息
-     *
-     * @param authUserDTO
-     * @return
      */
     @RequestMapping("getUserInfo")
     public Result<Boolean> getUserInfo(@RequestBody AuthUserDTO authUserDTO) {

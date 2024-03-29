@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 
 import com.jingdianjichi.auth.application.convent.AuthRolePermissionDTOConverter;
 import com.jingdianjichi.auth.application.dto.AuthRolePermissionDTO;
-import com.jingdianjichi.auth.common.entity.Result;
+import com.jingdianjichi.auth.entity.Result;
 import com.jingdianjichi.auth.domain.entity.AuthRolePermissionBO;
 import com.jingdianjichi.auth.domain.service.AuthRolePermissionDomainService;
 import lombok.extern.slf4j.Slf4j;

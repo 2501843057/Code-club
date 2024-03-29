@@ -83,7 +83,24 @@ public class SubjectInfoServiceImpl implements SubjectInfoService {
     }
 
     @Override
-    public List<SubjectLabel> batchQueryById(List<Long> labelIdList) {
-        return subjectLabelDao.batchQueryByLabelId(labelIdList);
+    public List<SubjectInfo> batchQuery(List<Long> list) {
+        return subjectInfoDao.batchQuery(list);
     }
+
+    @Override
+    public List<SubjectLabel> batchQueryById(List<Long> list) {
+        return subjectLabelDao.batchQueryByLabelId(list);
+    }
+
+    @Override
+    public List<SubjectInfo> getRankings() {
+        return subjectInfoDao.getRankings();
+    }
+
+    @Override
+    public Long querySubjectIdCursor(Long subjectId, Long categoryId, Long labelId, int cursor) {
+        return this.subjectInfoDao.querySubjectIdCursor(subjectId, categoryId, labelId, cursor);
+    }
+
+
 }

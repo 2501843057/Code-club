@@ -10,10 +10,12 @@ import com.jingdianjichi.subject.application.convent.SubjectLabelDTOConverter;
 import com.jingdianjichi.subject.application.dto.SubjectCategoryDTO;
 import com.jingdianjichi.subject.application.dto.SubjectLabelDTO;
 import com.jingdianjichi.subject.common.entity.Result;
+import com.jingdianjichi.subject.common.util.LoginUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,6 +148,7 @@ public class SubjectCategoryController {
             if(log.isInfoEnabled()){
                 log.info("SubjectCategoryController.queryCategoryAndLabel.dto:{}", JSON.toJSONString(subjectCategoryDTO));
             }
+            String loginId = LoginUtil.getLoginId();
             Preconditions.checkNotNull(subjectCategoryDTO.getId(),"id不能为空");
             SubjectCategoryBo subjectCategoryBo = SubjectCategoryDTOConverter
                     .INSTANCE.subjectCategoryDTOToBo(subjectCategoryDTO);

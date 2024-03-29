@@ -124,6 +124,7 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Override
     public SaTokenInfo doLogin(String validCode) {
 
+        // 验证码是否正确
         String loginKey = redisUtil.buildKey(LOGIN_PREFIX, validCode);
         String openId = redisUtil.get(loginKey);
         if (Strings.isBlank(openId)) {

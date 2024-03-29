@@ -164,11 +164,45 @@
         limit #{start},#{pageSize}
     </select>
 
-<!--    标签id映射标签名称-->
-    <select id="batchQueryById" resultMap="SubjectInfoMap">
-        select subject_name
-        from subject_label
+
+
+
+
+    <select id="getRankings" resultType="com.jingdianjichi.infra.batic.entity.SubjectInfo">
+        select COUNT(1) as subjectCount,
+            created_by as createdBy
+        from subject_info
+        where is_deleted = 0
+        and created_by is not null
+        GROUP BY created_by
+        limit 0,5
     </select>
+
+    <select id="batchQuery" resultType="com.jingdianjichi.infra.batic.entity.SubjectInfo">
+        select *
+        from subject_info
+        where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <select id="querySubjectIdCursor" resultType="java.lang.Long">
+        select a.id
+        from subject_info a, subject_mapping b
+        where a.id = b.subject_id
+        and b.category_id = #{categoryId}
+        and b.label_id = #{labelId}
+        <if test="cursor == 1">
+            and a.id > #{subjectId}
+        </if>
+        <if test="cursor == 0">
+            and a.id &lt; #{subjectId}
+        </if>
+        limit 0,1;
+    </select>
+
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">

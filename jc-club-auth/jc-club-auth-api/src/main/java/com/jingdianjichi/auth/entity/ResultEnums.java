@@ -1,4 +1,4 @@
-package com.jingdianjichi.auth.common.enums;
+package com.jingdianjichi.auth.entity;
 
 import lombok.Getter;
 

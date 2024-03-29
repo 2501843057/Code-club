@@ -16,7 +16,8 @@ public class ThreadPoolConfig {
     @Bean(name = "LabelThreadPool")
     public ThreadPoolExecutor getLabelThreadPool() {
         return new ThreadPoolExecutor(20, 100, 5,
-                TimeUnit.MINUTES, new LinkedBlockingQueue<>(40), Executors.defaultThreadFactory()
+                TimeUnit.MINUTES, new LinkedBlockingQueue<>(40),
+                new CustomNameThreadFactory("label")
                 , new ThreadPoolExecutor.CallerRunsPolicy());
     }
 

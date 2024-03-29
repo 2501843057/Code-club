@@ -1,8 +1,9 @@
 package com.jingdianjichi.infra.batic.mapper;
 
+
 import com.jingdianjichi.infra.batic.entity.SubjectInfo;
-import com.jingdianjichi.infra.batic.entity.SubjectLabel;
 import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -81,6 +82,15 @@ public interface SubjectInfoDao {
                                 @Param("start") int start,
                                 @Param("pageSize") Integer pageSize);
 
-    List<SubjectLabel> batchQueryById(List<Long> labelIdList);
+
+    List<SubjectInfo> getRankings();
+
+    List<SubjectInfo> batchQuery(List<Long> list);
+
+
+    Long querySubjectIdCursor(@Param("subjectId") Long subjectId,
+                              @Param("categoryId") Long categoryId,
+                              @Param("labelId") Long labelId,
+                              @Param("cursor") int cursor);
 }
 

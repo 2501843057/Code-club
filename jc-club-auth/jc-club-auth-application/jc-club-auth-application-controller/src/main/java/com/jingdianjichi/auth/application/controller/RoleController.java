@@ -1,18 +1,13 @@
 package com.jingdianjichi.auth.application.controller;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.google.common.base.Preconditions;
 import com.jingdianjichi.auth.application.convent.AuthRoleDTOConverter;
-import com.jingdianjichi.auth.application.convent.AuthUserDTOConverter;
 import com.jingdianjichi.auth.application.dto.AuthRoleDTO;
-import com.jingdianjichi.auth.application.dto.AuthUserDTO;
-import com.jingdianjichi.auth.common.entity.Result;
+import com.jingdianjichi.auth.entity.Result;
 import com.jingdianjichi.auth.domain.entity.AuthRoleBO;
-import com.jingdianjichi.auth.domain.entity.AuthUserBO;
 import com.jingdianjichi.auth.domain.service.AuthRoleDomainService;
-import com.jingdianjichi.auth.domain.service.AuthUserDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -51,4 +51,10 @@ public interface SubjectInfoService {
     List<SubjectInfo> queryPage(SubjectInfo subjectInfo, Long categoryId, Long labelId, int start, Integer pageSize);
 
     List<SubjectLabel> batchQueryById(List<Long> labelIdList);
+
+    List<SubjectInfo> batchQuery(List<Long> list);
+
+    List<SubjectInfo> getRankings();
+
+    Long querySubjectIdCursor(Long subjectId, Long categoryId, Long labelId, int cursor);
 }

@@ -1,8 +1,11 @@
 package com.jingdianjichi.subject.common.entity;
 
+import lombok.Data;
+
 /**
  * 分页请求实体
  */
+@Data
 public class PageInfo {
 
     private Integer pageNo = 1;

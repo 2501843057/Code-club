@@ -6,6 +6,7 @@ import com.jingdianjichi.domain.convent.SubjectCategoryBoConverter;
 import com.jingdianjichi.domain.entity.SubjectCategoryBo;
 import com.jingdianjichi.domain.entity.SubjectLabelBo;
 import com.jingdianjichi.domain.service.SubjectCategoryDomainService;
+import com.jingdianjichi.domain.util.CacheUtil;
 import com.jingdianjichi.infra.batic.entity.SubjectCategory;
 import com.jingdianjichi.infra.batic.entity.SubjectLabel;
 import com.jingdianjichi.infra.batic.entity.SubjectMapping;
@@ -44,6 +45,9 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
     @Resource
     private ThreadPoolExecutor labelThreadPool;
+
+    @Resource
+    private CacheUtil cacheUtil;
 
     public void add(SubjectCategoryBo subjectCategoryBo) {
         if (log.isInfoEnabled()) {
@@ -112,10 +116,17 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         if(log.isInfoEnabled()){
             log.info("SubjectCategoryDomainService.queryCategoryAndLabel.bo:{}", JSON.toJSONString(subjectCategoryBo));
         }
+        Long id = subjectCategoryBo.getId();
+        String cacheKey = "CategoryAndLabel." + id;
+        List<SubjectCategoryBo> subjectCategoryBoList = cacheUtil.getResult(cacheKey, SubjectCategoryBo.class,
+                (key) -> getSubjectCategoryBos(id));
+        return subjectCategoryBoList;
+    }
 
+    private List<SubjectCategoryBo> getSubjectCategoryBos(Long id) {
         // 查询大类下的所有小类
         SubjectCategory subjectCategory = new SubjectCategory();
-        subjectCategory.setParentId(subjectCategoryBo.getId());
+        subjectCategory.setParentId(id);
         subjectCategory.setIsDeleted(IsDeleteEnums.UN_DELETE.code);
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
         List<SubjectCategoryBo> subjectCategoryBoList = SubjectCategoryBoConverter.INSTANCE.ListToBoList(subjectCategoryList);
@@ -142,8 +153,29 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         subjectCategoryBoList.forEach(subjectCategoryBo1 -> {
             subjectCategoryBo1.setLabelBoList(map.get(subjectCategoryBo1.getId()));
         });
+        return subjectCategoryBoList;
+    }
 
-          /**
+    private Map<Long,List<SubjectLabelBo>> getLabelList(SubjectCategoryBo categoryBo) {
+        HashMap<Long, List<SubjectLabelBo>> map = new HashMap<>();
+        SubjectMapping mapping = new SubjectMapping();
+        mapping.setCategoryId(categoryBo.getId());
+        List<SubjectMapping> mappingList = subjectMappingService.queryLabelId(mapping);
+        // 获取标签id集合
+        List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
+        List<SubjectLabel> labelList = subjectLabelService.batchQueryByLabelId(labelIdList);
+        ArrayList<SubjectLabelBo> subjectLabelBos = new ArrayList<>();
+        // 组装标签信息
+        labelList.forEach(label -> {
+            SubjectLabelBo subjectLabelBo = new SubjectLabelBo();
+            subjectLabelBo.setId(label.getId());
+            subjectLabelBo.setLabelName(label.getLabelName());
+            subjectLabelBo.setSortNum(label.getSortNum());
+            subjectLabelBo.setCategoryId(label.getCategoryId());
+            subjectLabelBos.add(subjectLabelBo);
+        });
+        map.put(categoryBo.getId(),subjectLabelBos);
+        /**
          *  多线程处理方法 FutureTask
          */
 //        // 一次获取标签信息
@@ -169,28 +201,6 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 //            subjectCategoryBo1.setLabelBoList(map.get(subjectCategoryBo1.getId()));
 //        });
 
-        return subjectCategoryBoList;
-    }
-
-    private Map<Long,List<SubjectLabelBo>> getLabelList(SubjectCategoryBo categoryBo) {
-        HashMap<Long, List<SubjectLabelBo>> map = new HashMap<>();
-        SubjectMapping mapping = new SubjectMapping();
-        mapping.setCategoryId(categoryBo.getId());
-        List<SubjectMapping> mappingList = subjectMappingService.queryLabelId(mapping);
-        // 获取标签id集合
-        List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
-        List<SubjectLabel> labelList = subjectLabelService.batchQueryByLabelId(labelIdList);
-        ArrayList<SubjectLabelBo> subjectLabelBos = new ArrayList<>();
-        // 组装标签信息
-        labelList.forEach(label -> {
-            SubjectLabelBo subjectLabelBo = new SubjectLabelBo();
-            subjectLabelBo.setId(label.getId());
-            subjectLabelBo.setLabelName(label.getLabelName());
-            subjectLabelBo.setSortNum(label.getSortNum());
-            subjectLabelBo.setCategoryId(label.getCategoryId());
-            subjectLabelBos.add(subjectLabelBo);
-        });
-        map.put(categoryBo.getId(),subjectLabelBos);
         return map;
     }
 }
