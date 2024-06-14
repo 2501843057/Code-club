@@ -55,6 +55,6 @@ public class EsSearchRequest {
     /**
      * 高亮builder
      */
-    private HighlightBuilder highlightBuilder;
+    private HighlightBuilder  highlightBuilder;
 
 }

@@ -1,6 +1,4 @@
 package com.jingdianjichi.oss.util;
-
-
 import com.jingdianjichi.oss.entity.FileInfo;
 import io.minio.*;
 import io.minio.messages.Bucket;
@@ -89,7 +87,4 @@ public class MinioUtil {
     public void deleteObject(String bucket,String objectName) throws Exception{
         minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucket).object(objectName).build());
     }
-
-
-
 }

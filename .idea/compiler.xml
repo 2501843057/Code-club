@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jc-club-auth-infra" />
+        <module name="jc-club-wx" />
+        <module name="jc-club-gateway" />
+        <module name="jc-club-application-controller" />
+        <module name="jc-club-practice-server" />
+        <module name="jc-club-auth-api" />
+        <module name="jc-club-practice-api" />
+        <module name="jc-club-domain" />
+        <module name="jc-club-auth-domain" />
+        <module name="jc-club-auth-starter" />
+        <module name="jc-club-auth-application-mq" />
+        <module name="jc-club-subject-api" />
+        <module name="jc-club-infra" />
+        <module name="jc-club-starter" />
+        <module name="jc-club-application-job" />
+        <module name="jc-club-auth-common" />
+        <module name="jc-gen" />
+        <module name="jc-club-common" />
+        <module name="jc-club-auth-application-controller" />
+        <module name="jc-club-oss" />
+        <module name="jc-club-application-mq" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jc-club-auth-application-domain" target="1.8" />
+      <module name="jc-club-gen" target="1.8" />
+      <module name="jc-gateway" target="1.8" />
+      <module name="jc-gen" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="jc-club-gen" options="-parameters" />
+    </option>
+  </component>
+</project>

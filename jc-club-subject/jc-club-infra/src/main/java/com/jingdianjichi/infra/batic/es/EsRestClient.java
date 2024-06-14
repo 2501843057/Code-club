@@ -59,21 +59,37 @@ public class EsRestClient {
         COMMON_OPTIONS = builder.build();
     }
 
+    /**
+     * 初始化方法，用于在对象创建后立即执行初始化逻辑。
+     * 该方法从配置中读取所有ES集群配置，并为每个配置创建一个RestHighLevelClient实例。
+     * 成功创建的客户端将被保存在一个映射中，以集群名称为键。
+     */
     @PostConstruct
     public void initialize() {
+        // 从配置属性中获取所有的ES集群配置
         List<EsClusterConfig> esConfigs = esConfigProperties.getEsConfigs();
         for (EsClusterConfig esConfig : esConfigs) {
+            // 记录初始化信息
             log.info("initialize.config.name:{},node:{}", esConfig.getName(), esConfig.getNodes());
             RestHighLevelClient restHighLevelClient = initRestClient(esConfig);
             if (restHighLevelClient != null) {
+                // 成功创建客户端，保存到映射中
                 clientMap.put(esConfig.getName(), restHighLevelClient);
             } else {
+                // 创建客户端失败，记录错误日志
                 log.error("config.name:{},node:{}.initError", esConfig.getName(), esConfig.getNodes());
             }
         }
     }
 
+    /**
+     * 初始化RestHighLevelClient实例。
+     *
+     * @param esClusterConfig 集群配置信息，包含集群的节点地址等配置。
+     * @return 创建成功的RestHighLevelClient实例，如果创建失败则返回null。
+     */
     private RestHighLevelClient initRestClient(EsClusterConfig esClusterConfig) {
+        // 解析节点地址字符串为HttpHost列表
         String[] ipPortArr = esClusterConfig.getNodes().split(",");
         List<HttpHost> httpHostList = new ArrayList<>(ipPortArr.length);
         for (String ipPort : ipPortArr) {
@@ -83,13 +99,16 @@ public class EsRestClient {
                 httpHostList.add(httpHost);
             }
         }
+        // 将HttpHost列表转换为数组
         HttpHost[] httpHosts = new HttpHost[httpHostList.size()];
         httpHostList.toArray(httpHosts);
 
+        // 使用HttpHost数组构建RestClientBuilder，并创建RestHighLevelClient实例
         RestClientBuilder builder = RestClient.builder(httpHosts);
         RestHighLevelClient restHighLevelClient = new RestHighLevelClient(builder);
         return restHighLevelClient;
     }
+
 
     private static RestHighLevelClient getClient(String clusterName) {
         return clientMap.get(clusterName);
@@ -163,7 +182,7 @@ public class EsRestClient {
     }
 
     /**
-     * 删除索引
+     * 删除所有索引
      */
     public static boolean delete(EsIndexInfo esIndexInfo) {
         try {
@@ -183,7 +202,7 @@ public class EsRestClient {
     }
 
     /**
-     * 删除文档
+     * 删除文档byid
      */
     public static boolean deleteDoc(EsIndexInfo esIndexInfo, String docId) {
         try {
@@ -247,11 +266,15 @@ public class EsRestClient {
     }
 
     /**
-     * 搜索
+     * 根据ES搜索请求执行搜索操作。
+     * @param esSearchRequest 包含搜索相关参数的ES搜索请求对象。
+     * @return 返回搜索结果响应对象。
      */
     public static SearchResponse searchWithTermQuery(EsIndexInfo esIndexInfo,
                                                      EsSearchRequest esSearchRequest) {
+
         try {
+            // 从ES搜索请求中获取查询构建器、字段、起始位置、返回大小、时间范围、是否需要滚动扫描、排序字段和排序顺序
             BoolQueryBuilder bq = esSearchRequest.getBq();
             String[] fields = esSearchRequest.getFields();
             int from = esSearchRequest.getFrom();
@@ -261,33 +284,44 @@ public class EsRestClient {
             String sortName = esSearchRequest.getSortName();
             SortOrder sortOrder = esSearchRequest.getSortOrder();
 
+            // 构建搜索源构建器，并设置查询、返回字段、起始位置、返回大小
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
             searchSourceBuilder.query(bq);
             searchSourceBuilder.fetchSource(fields, null).from(from).size(size);
 
+            // 如果存在高亮构建器，则设置高亮
             if (Objects.nonNull(esSearchRequest.getHighlightBuilder())) {
                 searchSourceBuilder.highlighter(esSearchRequest.getHighlightBuilder());
             }
 
+            // 如果指定了排序字段，则添加排序
             if (StringUtils.isNotBlank(sortName)) {
                 searchSourceBuilder.sort(sortName);
             }
 
+            // 默认按分数降序排序
             searchSourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC));
 
+            // 构建搜索请求对象，并设置搜索类型、索引名称和搜索源构建器
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.searchType(SearchType.DEFAULT);
             searchRequest.indices(esIndexInfo.getIndexName());
             searchRequest.source(searchSourceBuilder);
+
+            // 如果需要滚动扫描，则设置滚动扫描参数
             if (needScroll) {
                 Scroll scroll = new Scroll(TimeValue.timeValueMinutes(minutes));
                 searchRequest.scroll(scroll);
             }
+
+            // 执行搜索操作，并返回搜索响应
             SearchResponse search = getClient(esIndexInfo.getClusterName()).search(searchRequest, COMMON_OPTIONS);
             return search;
         } catch (Exception e) {
+            // 记录搜索异常
             log.error("searchWithTermQuery.exception:{}", e.getMessage(), e);
         }
+
         return null;
     }
 

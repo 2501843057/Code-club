@@ -16,7 +16,7 @@ public class MinioStorageAdapter implements StorageAdapter {
     @Resource
     private MinioUtil minioUtil;
 
-    @Value("${minio.url}")
+    @Value(" ${minio.url}")
     private String url;
 
     @Override

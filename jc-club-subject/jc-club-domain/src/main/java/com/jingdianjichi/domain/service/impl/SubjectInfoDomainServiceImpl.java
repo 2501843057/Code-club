@@ -101,7 +101,6 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
         // 用zadd存储到redis中
         redisUtil.addScore(RANK_KEY, LoginUtil.getLoginId(), 1);
-
     }
 
     @Override
@@ -187,7 +186,6 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Override
     public List<SubjectInfoBo> getRankings() {
-
         Set<ZSetOperations.TypedTuple<String>> typedTuples = redisUtil.rankWithScore(RANK_KEY, 0, 5);
 
         if(CollectionUtils.isEmpty(typedTuples)){

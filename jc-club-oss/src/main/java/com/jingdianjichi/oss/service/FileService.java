@@ -1,10 +1,7 @@
 package com.jingdianjichi.oss.service;
-
 import com.jingdianjichi.oss.adapter.StorageAdapter;
-import io.minio.Result;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @Service

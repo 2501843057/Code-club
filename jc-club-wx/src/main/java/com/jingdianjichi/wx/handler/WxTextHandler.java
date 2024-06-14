@@ -24,7 +24,7 @@ public class WxTextHandler implements WxChatMsgHandler{
         String toUserName = map.get("ToUserName");
         String fromUserName = map.get("FromUserName");
         Random random = new Random();
-        int randomNum = random.nextInt(10000);
+        int randomNum = random.nextInt(1000);
 
         String numKey = redisUtil.buildKey(LOGIN_PREFIX, String.valueOf(randomNum));
         redisUtil.setNx(numKey, fromUserName, 5L, TimeUnit.MINUTES);

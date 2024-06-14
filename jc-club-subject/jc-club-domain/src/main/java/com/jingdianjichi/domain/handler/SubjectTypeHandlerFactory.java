@@ -4,6 +4,7 @@ import com.jingdianjichi.subject.common.enums.SubjectTypeEnums;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ public class SubjectTypeHandlerFactory implements InitializingBean {
     private List<SubjectInfoHandler> infoHandlerList;
 
     private HashMap<SubjectTypeEnums,SubjectInfoHandler> handlerMap = new HashMap<>();
+
 
     public SubjectInfoHandler getHandle(int subjectType){
         SubjectTypeEnums typeEnum = SubjectTypeEnums.getByCode(subjectType);

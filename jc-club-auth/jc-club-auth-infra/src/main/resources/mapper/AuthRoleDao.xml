@@ -90,7 +90,7 @@
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into auth_role(role_name, role_key, created_by, created_time, update_by, update_time, is_deleted)
         values (#{roleName}, #{roleKey}, #{createdBy}, #{createdTime}, #{updateBy}, #{updateTime}, #{isDeleted})
-    </insert>
+    </insert
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
         insert into auth_role(role_name, role_key, created_by, created_time, update_by, update_time, is_deleted)

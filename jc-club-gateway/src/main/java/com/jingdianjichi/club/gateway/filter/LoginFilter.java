@@ -15,7 +15,8 @@ import reactor.core.publisher.Mono;
  * 登录拦截器，获取loginID
  */
 @Component
-public class LoginFilter implements GlobalFilter {
+public class
+LoginFilter implements GlobalFilter {
     @Override
     @SneakyThrows
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

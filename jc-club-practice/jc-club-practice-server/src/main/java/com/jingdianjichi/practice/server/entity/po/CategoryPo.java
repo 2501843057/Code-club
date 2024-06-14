@@ -1,0 +1,15 @@
+package com.jingdianjichi.practice.server.entity.po;
+
+import lombok.Data;
+
+@Data
+public class CategoryPo {
+
+    private Long id;
+
+    private String categoryName;
+
+    private Integer categoryType;
+
+    private Long parentId;
+}

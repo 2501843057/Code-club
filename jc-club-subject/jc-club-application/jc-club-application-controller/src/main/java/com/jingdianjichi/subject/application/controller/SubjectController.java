@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 import com.jingdianjichi.domain.entity.SubjectAnswerBo;
 import com.jingdianjichi.domain.entity.SubjectInfoBo;
 import com.jingdianjichi.domain.service.SubjectInfoDomainService;
-import com.jingdianjichi.infra.batic.entity.SubjectInfo;
 import com.jingdianjichi.infra.batic.entity.SubjectInfoEs;
 import com.jingdianjichi.subject.application.convent.SubjectAnswerDTOConverter;
 import com.jingdianjichi.subject.application.convent.SubjectCategoryDTOConverter;
@@ -29,7 +28,7 @@ import java.util.List;
 
 /**
  *
- * 刷题分类Category
+ * 题目模块
  *
  */
 @RestController
@@ -165,7 +164,7 @@ public class SubjectController {
 
 
     /**
-     * 排行榜（数据库版）
+     * 排行榜
      */
     @PostMapping("/getRankings")
     public Result<SubjectInfoDTO> getRankings(){

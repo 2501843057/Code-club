@@ -42,10 +42,18 @@ public class CacheUtil<K,V> {
         }
         return reslutList;
     }
-
     public Map<K, V> getMapResult(String cacheKey, Class<V> clazz,
                                   Function<String, Map<K, V>> function) {
-
-        return new HashMap<>();
+        Map<K, V> map = new HashMap<>();
+        String content = localCache.getIfPresent(cacheKey);
+        if(StringUtils.isNotBlank(content)){
+            map = (Map<K, V>) JSON.parseObject(content,clazz);
+        }else{
+            map = function.apply(cacheKey);
+            if(CollectionUtils.isNotEmpty(map)){
+                localCache.put(cacheKey,JSON.toJSONString(map));
+            }
+        }
+        return map;
     }
 }

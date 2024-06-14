@@ -15,7 +15,6 @@ public interface StorageAdapter {
      */
     public void createBucket(String bucket);
 
-
     /**
      * 上传文件
      */

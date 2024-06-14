@@ -82,7 +82,7 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
 
         SubjectLabel subjectLabel = SubjectLabelBoConverter.INSTANCE.subjectBoTOLabel(subjectLabelBo);
         subjectLabel.setIsDeleted(IsDeleteEnums.UN_DELETE.code);
-        // 去subject_mapping表查标签id
+        // 二级分类去关联表中取对应的标签id
         List<SubjectMapping> mappingList = subjectMappingService.queryLabel(subjectLabel);
         if(CollectionUtils.isEmpty(mappingList)){
             return Collections.emptyList();

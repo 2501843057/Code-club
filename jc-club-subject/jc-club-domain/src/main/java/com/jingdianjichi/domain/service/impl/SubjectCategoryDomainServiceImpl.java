@@ -50,6 +50,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     private CacheUtil cacheUtil;
 
     public void add(SubjectCategoryBo subjectCategoryBo) {
+   ;
         if (log.isInfoEnabled()) {
             log.info("SubjectCategoryDomainService.add.bo:{}", JSON.toJSONString(subjectCategoryBo));
         }
@@ -136,7 +137,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
          */
         HashMap<Long, List<SubjectLabelBo>> map = new HashMap<>();
         List<CompletableFuture<Map<Long, List<SubjectLabelBo>>>> completableFutureList = subjectCategoryBoList.stream().map(category ->
-                CompletableFuture.supplyAsync(() -> getLabelList(category), labelThreadPool)).collect(Collectors.toList());
+                CompletableFuture.supplyAsync(() ->  getLabelList(category), labelThreadPool)).collect(Collectors.toList());
         completableFutureList.forEach(future->{
             Map<Long,List<SubjectLabelBo>> resultMap = null;
             try {
@@ -163,6 +164,9 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         List<SubjectMapping> mappingList = subjectMappingService.queryLabelId(mapping);
         // 获取标签id集合
         List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(labelIdList)){
+            return map;
+        }
         List<SubjectLabel> labelList = subjectLabelService.batchQueryByLabelId(labelIdList);
         ArrayList<SubjectLabelBo> subjectLabelBos = new ArrayList<>();
         // 组装标签信息
