@@ -42,5 +42,6 @@
           and category_type = #{categoryType}
     </select>
 
+
 </mapper>
 
