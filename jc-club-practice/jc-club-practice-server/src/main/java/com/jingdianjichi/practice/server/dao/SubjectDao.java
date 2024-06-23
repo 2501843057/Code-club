@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface SubjectDao {
     List<SubjectPO> getPracticeSubject(PracticeSubjectDTO dto);
+
+    SubjectPO getSubjectById(Long subjectId);
 }

@@ -9,5 +9,15 @@
             (#{item.setId}, #{item.subjectType}, #{item.createdTime}, #{item.subjectId}, #{item.createdBy}, #{item.updateBy}, #{item.isDeleted}, #{item.updateTime})
         </foreach>
     </insert>
+
+    <select id="getSubjects" resultType="com.jingdianjichi.practice.server.entity.po.PracticeSetDetailPO">
+        select subject_id   as subjectId,
+               subject_type as subjectType
+        from practice_set_detail
+        where is_deleted = 0
+          and set_id = #{titleId}
+    </select>
+
+
 </mapper>
 

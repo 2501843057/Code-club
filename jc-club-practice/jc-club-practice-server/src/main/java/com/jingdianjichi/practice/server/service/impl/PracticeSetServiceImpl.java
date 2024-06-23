@@ -1,7 +1,9 @@
 package com.jingdianjichi.practice.server.service.impl;
 
+import com.jingdianjichi.practice.api.enums.CompleteStatusEnum;
 import com.jingdianjichi.practice.api.enums.IsDeleteEnums;
 import com.jingdianjichi.practice.api.enums.SubjectTypeEnums;
+import com.jingdianjichi.practice.api.req.GetPracticeSubjectsReq;
 import com.jingdianjichi.practice.server.dao.*;
 import com.jingdianjichi.practice.server.entity.dto.CategoryDTO;
 import com.jingdianjichi.practice.server.entity.dto.PracticeSubjectDTO;
@@ -10,11 +12,13 @@ import com.jingdianjichi.practice.server.service.PracticeSetService;
 import com.jingdianjichi.practice.server.vo.*;
 import com.jingdianjichi.subject.common.util.LoginUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -38,6 +42,18 @@ public class PracticeSetServiceImpl implements PracticeSetService {
 
     @Resource
     private SubjectDao subjectDao;
+
+    @Resource
+    private SubjectRadioDao subjectRadioDao;
+
+    @Resource
+    private SubjectMultipleDao subjectMultipleDao;
+
+    @Resource
+    private PracticeDetailDao practiceDetailDao;
+
+    @Resource
+    private PracticeInfoDao practiceInfoDao;
 
 
     @Override
@@ -157,6 +173,110 @@ public class PracticeSetServiceImpl implements PracticeSetService {
 
         practiceSetVO.setSetId(practiceSetId);
         return practiceSetVO;
+    }
+
+    @Override
+    public PracticeSubjectListVO getSubjects(GetPracticeSubjectsReq req) {
+        Long titleId = req.getTitleId();
+        Long practiceId = req.getPracticeId();
+        String loginId = LoginUtil.getLoginId();
+        List<PracticeSetDetailPO> practiceSetDetailPOS = practiceSetDetailDao.getSubjects(titleId);
+        if(CollectionUtils.isEmpty(practiceSetDetailPOS)){
+            return null;
+        }
+
+        ArrayList<PracticeSubjectDetailVO> practiceSubjectDetailVOS = new ArrayList<>();
+        practiceSetDetailPOS.forEach(item->{
+            PracticeSubjectDetailVO practiceSubjectDetailVO = new PracticeSubjectDetailVO();
+            practiceSubjectDetailVO.setSubjectId(item.getSubjectId());
+            practiceSubjectDetailVO.setSubjectType(item.getSubjectType());
+            if(Objects.nonNull(practiceId)){
+                PracticeDetailPO practiceDetailPO = practiceDetailDao.selectDetail(loginId,practiceId,item.getSubjectId());
+                if(Objects.nonNull(practiceDetailPO) && Strings.isNotBlank(practiceDetailPO.getAnswerContent())){
+                    practiceSubjectDetailVO.setIsAnswer(1);
+                }else{
+                    practiceSubjectDetailVO.setIsAnswer(0);
+                }
+            }
+            practiceSubjectDetailVOS.add(practiceSubjectDetailVO);
+        });
+
+        PracticeSubjectListVO practiceSubjectListVO = new PracticeSubjectListVO();
+        practiceSubjectListVO.setPracticeSubjectDetailVOS(practiceSubjectDetailVOS);
+        PracticeSetPO practiceSetPo = practiceSetDao.getTitleName(titleId);
+        practiceSubjectListVO.setTitle(practiceSetPo.getSetName());
+
+        // 第一次创建练习practice_info
+        if(Objects.isNull(practiceId)){
+            Long newPracticeId = insertUnCompletePractice(titleId);
+            practiceSubjectListVO.setPracticeId(newPracticeId);
+        }else{
+            updateUnCompletePractice(practiceId);
+            PracticeInfoPO po = practiceInfoDao.selectById(practiceId);
+            practiceSubjectListVO.setTimeUse(po.getTimeUse());
+            practiceSubjectListVO.setPracticeId(practiceId);
+        }
+
+        return practiceSubjectListVO;
+    }
+
+    private Long insertUnCompletePractice(Long practiceSetId) {
+        PracticeInfoPO practicePO = new PracticeInfoPO();
+        practicePO.setSetId(practiceSetId);
+        practicePO.setCompleteStatus(CompleteStatusEnum.NO_COMPLETE.getCode());
+        practicePO.setTimeUse("00:00:00");
+        practicePO.setSubmitTime(new Date());
+        practicePO.setCorrectRate(new BigDecimal("0.00"));
+        practicePO.setIsDeleted(IsDeleteEnums.UN_DELETE.getCode());
+        practicePO.setCreatedBy(LoginUtil.getLoginId());
+        practicePO.setCreatedTime(new Date());
+        practiceInfoDao.insert(practicePO);
+        return practicePO.getId();
+    }
+
+    private void updateUnCompletePractice(Long practiceId) {
+        PracticeInfoPO practicePO = new PracticeInfoPO();
+        practicePO.setId(practiceId);
+        practicePO.setSubmitTime(new Date());
+        practiceInfoDao.update(practicePO);
+    }
+
+
+    @Override
+    public PracticeSubjectVO getPracticeSubject(PracticeSubjectDTO dto) {
+        PracticeSubjectVO practiceSubjectVO = new PracticeSubjectVO();
+        Long subjectId = dto.getSubjectId();
+
+        SubjectPO subjectPO = subjectDao.getSubjectById(subjectId);
+        practiceSubjectVO.setSubjectName(subjectPO.getSubjectName());
+        practiceSubjectVO.setSubjectType(subjectPO.getSubjectType());
+        // 单选
+        if(dto.getSubjectType() == SubjectTypeEnums.RADIO.getCode()){
+            List<PracticeSubjectOptionVO> optionList = new ArrayList<>();
+            List<SubjectRadioPo> subjectRadioPos = subjectRadioDao.selectBySubjectId(subjectId);
+            subjectRadioPos.forEach(item->{
+                PracticeSubjectOptionVO practiceSubjectOptionVO = new PracticeSubjectOptionVO();
+                practiceSubjectOptionVO.setOptionType(item.getOptionType());
+                practiceSubjectOptionVO.setOptionContent(item.getOptionContent());
+                practiceSubjectOptionVO.setIsCorrect(item.getIsCorrect());
+                optionList.add(practiceSubjectOptionVO);
+            });
+            practiceSubjectVO.setOptions(optionList);
+        }
+        // 多选
+        if(dto.getSubjectType() == SubjectTypeEnums.MULTIPLE.getCode()){
+            List<PracticeSubjectOptionVO> optionList = new ArrayList<>();
+            List<SubjectMultiplePO> subjectRadioPos = subjectMultipleDao.selectBySubjectId(subjectId);
+            subjectRadioPos.forEach(item->{
+                PracticeSubjectOptionVO practiceSubjectOptionVO = new PracticeSubjectOptionVO();
+                practiceSubjectOptionVO.setOptionType(item.getOptionType());
+                practiceSubjectOptionVO.setOptionContent(item.getOptionContent());
+                practiceSubjectOptionVO.setIsCorrect(item.getIsCorrect());
+                optionList.add(practiceSubjectOptionVO);
+            });
+            practiceSubjectVO.setOptions(optionList);
+        }
+        return practiceSubjectVO;
     }
 
     private List<PracticeSubjectDetailVO> getPracticeList(PracticeSubjectDTO dto) {

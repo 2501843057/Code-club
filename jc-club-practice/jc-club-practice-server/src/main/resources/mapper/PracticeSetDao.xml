@@ -17,5 +17,12 @@
     </insert>
 
 
+    <select id="getTitleName" resultType="com.jingdianjichi.practice.server.entity.po.PracticeSetPO">
+        select set_name as setName
+        from practice_set
+        where id = #{titleId}
+    </select>
+
+
 </mapper>
 

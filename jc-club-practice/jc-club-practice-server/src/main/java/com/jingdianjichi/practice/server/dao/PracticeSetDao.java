@@ -10,4 +10,7 @@ import java.util.List;
 public interface PracticeSetDao {
 
     void add(PracticeSetPO practiceSetPO);
+
+
+    PracticeSetPO getTitleName(Long titleId);
 }

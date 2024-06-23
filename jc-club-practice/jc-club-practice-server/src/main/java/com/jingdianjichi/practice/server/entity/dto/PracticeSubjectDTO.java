@@ -11,6 +11,11 @@ public class PracticeSubjectDTO {
      * 组合id
      */
     private List<String> assembleIds;
+
+    /**
+     * 题目id
+     */
+    private Long subjectId;
     /**
      * 题目类型
      */

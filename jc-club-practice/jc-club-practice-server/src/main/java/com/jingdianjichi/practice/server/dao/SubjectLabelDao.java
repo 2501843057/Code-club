@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SubjectLabelDao {
-
-
     SubjectLabelPO queryById(Long labelId);
 }

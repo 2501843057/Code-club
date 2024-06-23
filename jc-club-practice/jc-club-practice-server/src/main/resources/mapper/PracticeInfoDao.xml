@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingdianjichi.practice.server.dao.PracticeInfoDao">
+    <insert id="insert">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+            INSERT INTO practice_info(set_id, complete_status, submit_time, time_use, created_by, created_time, update_by, update_time, is_deleted)
+            values (
+            #{setId,jdbcType=BIGINT},
+            #{completeStatus,jdbcType=BIGINT},
+            #{submitTime,jdbcType=TIMESTAMP},
+            #{timeUse,jdbcType=VARCHAR},
+            #{createdBy,jdbcType=VARCHAR},
+            #{createdTime,jdbcType=TIMESTAMP},
+            #{updateBy,jdbcType=VARCHAR},
+            #{updateTime,jdbcType=TIMESTAMP},
+            #{isDeleted,jdbcType=INTEGER})
+    </insert>
+
+    <update id="update">
+        update practice_info
+        set submit_time = #{submitTime,jdbcType=TIMESTAMP}
+        where id = #{id}
+    </update>
+
+    <select id="selectById" resultType="com.jingdianjichi.practice.server.entity.po.PracticeInfoPO">
+        select *
+        from practice_info
+        where is_deleted = 0
+        and id = #{practiceId}
+    </select>
+</mapper>

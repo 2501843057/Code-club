@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingdianjichi.practice.server.dao.PracticeDetailDao">
+
+
+    <select id="selectDetail" resultType="com.jingdianjichi.practice.server.entity.po.PracticeDetailPO">
+        select id,
+               subject_id as subjectId,
+               subject_type as subjectType,
+               answer_status as answerStatus,
+               answer_content as answerContent
+        from practice_detail
+        where subject_id = #{subjectId}
+        and practice_id = #{practiceId}
+        and created_by = #{loginId}
+        and is_deleted = 0
+    </select>
+</mapper>

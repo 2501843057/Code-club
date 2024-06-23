@@ -15,4 +15,6 @@ public class PracticeSubjectDetailVO {
      */
     private Integer subjectType;
 
+    private Integer isAnswer;
+
 }
