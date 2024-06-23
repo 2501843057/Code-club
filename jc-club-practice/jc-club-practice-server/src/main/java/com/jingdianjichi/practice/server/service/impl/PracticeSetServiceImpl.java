@@ -10,7 +10,6 @@ import com.jingdianjichi.practice.server.service.PracticeSetService;
 import com.jingdianjichi.practice.server.vo.*;
 import com.jingdianjichi.subject.common.util.LoginUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -143,7 +142,6 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         practiceSetDao.add(practiceSetPO);
         Long practiceSetId = practiceSetPO.getId();
 
-        //思考，这里哪里不符合规范，配合听视频的延伸
         List<PracticeSetDetailPO> practiceSetDetailPOS = new ArrayList<>();
         practiceList.forEach(e -> {
             PracticeSetDetailPO detailPO = new PracticeSetDetailPO();
@@ -194,7 +192,6 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         dto.setSubjectType(1);
         assembleList(dto, practiceSubjectListVOS, excludeSubjectIds);
         return practiceSubjectListVOS;
-
     }
 
     private List<PracticeSubjectDetailVO> assembleList(PracticeSubjectDTO dto,

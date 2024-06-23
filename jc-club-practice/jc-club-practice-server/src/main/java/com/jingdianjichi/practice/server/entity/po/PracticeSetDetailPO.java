@@ -31,6 +31,7 @@ public class PracticeSetDetailPO{
     /**
      * 创建时间
      */
+
     private Date createdTime;
     /**
      * 更新人

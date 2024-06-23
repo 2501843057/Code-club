@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jingdianjichi.practice.server.dao.PracticeSetDetailDao">
+
     <insert id="insertBatch">
-        insert into practice_set_detail
-        (set_id, subject_id, subject_type, created_by, created_time, is_deleted)
+        insert into practice_set_detail (set_id, subject_type, created_time, subject_id, created_by, update_by, is_deleted, update_time)
         values
-        <foreach collection="practiceSetDetailPOS" item="item" open="(" close=")" separator="," >
-            (#{item.setId}, #{item.subjectId}, #{item.subjectType}, #{item.createdBy}, #{item.createdTime}, #{item.isDeleted})
+        <foreach collection="practiceSetDetailPOS" item="item" separator=",">
+            (#{item.setId}, #{item.subjectType}, #{item.createdTime}, #{item.subjectId}, #{item.createdBy}, #{item.updateBy}, #{item.isDeleted}, #{item.updateTime})
         </foreach>
     </insert>
 </mapper>
